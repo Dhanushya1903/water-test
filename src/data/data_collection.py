@@ -39,7 +39,7 @@ def save_data(df : pd.DataFrame, filepath : str) -> None:
     
 
 def main():
-    data_filepath = "C:/Users/dhanu/Downloads/water_potability (1).csv"
+    data_filepath = os.path.join("data", "water_potability.csv")
     params_filepath = "params.yaml"
     raw_data_path = os.path.join("data","raw")
 

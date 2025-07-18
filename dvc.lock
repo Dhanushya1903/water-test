@@ -1,0 +1,76 @@
+schema: '2.0'
+stages:
+  data_collection:
+    cmd: python src/data/data_collection.py
+    deps:
+    - path: data/water_potability.csv
+      hash: md5
+      md5: a5eeae83d792e40da6c2f9e1eab945fc
+      size: 525187
+    - path: src/data/data_collection.py
+      hash: md5
+      md5: 54f6ab49e8678b7280ea84a2f7d52eff
+      size: 2043
+    outs:
+    - path: data/raw/test.csv
+      hash: md5
+      md5: 48f37719b3b4f5015079d39461bcde68
+      size: 104733
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 1b3ec0ae658d2a995c471fdd1787be65
+      size: 417529
+  pre_processing:
+    cmd: python src/data/data_prep.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: c0c2d65c14a603e91e029fda3c344a5c.dir
+      size: 522262
+      nfiles: 2
+    - path: src/data/data_prep.py
+      hash: md5
+      md5: ebd761167baa464324b9044947cd3222
+      size: 1841
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 09d7d1468d5c1e6739769af7e3154438.dir
+      size: 546137
+      nfiles: 2
+  model_building:
+    cmd: python src/model/model_building.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: 09d7d1468d5c1e6739769af7e3154438.dir
+      size: 546137
+      nfiles: 2
+    - path: src/model/model_building.py
+      hash: md5
+      md5: 37f9dcf2cedcada9f909f0977221c9e5
+      size: 2479
+    params:
+      params.yaml:
+        model_building.n_estimators: 100
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: 472d1740565c35034cd097f6323343d9
+      size: 7361427
+  model_eval:
+    cmd: python src/model/model_eval.py
+    deps:
+    - path: models/model.pkl
+      hash: md5
+      md5: 472d1740565c35034cd097f6323343d9
+      size: 7361427
+    - path: src/model/model_eval.py
+      hash: md5
+      md5: 1659bc60f0bf041eb776b51dc2b8493a
+      size: 2506
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: fb5f22c149c9b0c4a2162f191a7245f4
+      size: 150
